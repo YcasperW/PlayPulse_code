@@ -9,6 +9,8 @@
 **在线介绍页**：https://playpulse-intro.app-tencent.workbuddy.host/?sharecode=PPF3NAT2MV
 （页面首段为项目概述，并可查看一份示例报告）
 
+**源码仓库**：https://github.com/YcasperW/PlayPulse_code
+
 ---
 
 ## 为什么值得做（三个人家做不到的点）
