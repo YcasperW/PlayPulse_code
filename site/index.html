@@ -73,48 +73,35 @@
 </div>
 
 <h2><span class="no">二、</span>报告输出内容</h2>
+<p class="muted">以下列出报告包含的分析维度。具体数值、检出结论与关卡结构取决于每次上传的数据，不构成固定标准。</p>
 <ul>
-  <li><b>难度断崖</b>：以相邻关卡耗时倍数识别难度陡增，判定阈值 1.5；样例数据检出第 2 关为第 1 关的 1.62 倍。</li>
+  <li><b>难度断崖</b>：以相邻关卡耗时倍数识别难度陡增，判定阈值在语义层中配置。</li>
   <li><b>硬卡点与准流失</b>：依据卡住时长与退出占比标记风险关卡。</li>
   <li><b>卡关归因</b>：区分信息问题（引导说明不清）与数值问题（难度设定过高），避免归因偏差导致错误调参。</li>
   <li><b>可信边界</b>：每个估计值附置信区间与样本量；样本不足时，结论标注为方向性参考。</li>
 </ul>
 
-<h2><span class="no">三、</span>关键指标与验证结果</h2>
-<div class="tbl-wrap">
-<table>
-  <thead><tr><th>项目</th><th>数值</th><th>说明</th></tr></thead>
-  <tbody>
-    <tr><td>关卡数</td><td>3 关</td><td>样例数据的关卡结构</td></tr>
-    <tr><td>样本规模</td><td>100 名玩家 / 300 行</td><td>合成数据，每名玩家 3 关</td></tr>
-    <tr><td>语义层规模</td><td>14 项指标 / 6 条规则 / 2 个复合指标</td><td>口径的唯一事实来源</td></tr>
-    <tr><td>难度断崖检出</td><td>1.62 倍</td><td>第 2 关相对第 1 关，阈值 1.5</td></tr>
-    <tr><td>自动发现</td><td>4 条</td><td>样例报告输出的诊断结论</td></tr>
-    <tr><td>输出格式</td><td>3 种</td><td>Markdown / HTML / Excel，同源渲染</td></tr>
-  </tbody>
-</table>
-</div>
-
-<h2><span class="no">四、</span>功能模块</h2>
+<h2><span class="no">三、</span>功能模块</h2>
 <ul>
   <li><b>Pulse Check（难度体检）</b>：上传 CSV 后自动生成诊断报告，主流程已完成完整流程验证。</li>
   <li><b>PlayBench（跨项目基准线）</b>：架构已就位。目前仅 1 个项目具备游戏数据，基准库内项目均为合成派生数据，仅用于验证链路，不构成行业基准。</li>
   <li><b>Signal / Noise（小样本诚实性）</b>：实现 Bootstrap 置信区间、效应量与样本量门槛。</li>
 </ul>
 
-<h2><span class="no">五、</span>数据说明与使用边界</h2>
+<h2><span class="no">四、</span>数据说明与使用边界</h2>
 <div class="note">
-  本项目所用试玩数据，以及页面展示的示例报告，均为合成 / 仿真数据，用于验证分析链路，并非真实玩家记录。项目尚未上线，不存在线上效果数据，亦无可引用的业务提升比例。跨项目基准线部分目前不具备真实数据支撑，相关结果不作为行业基准使用。
+  本项目所用试玩数据，以及页面展示的示例报告，均为合成 / 仿真数据，用于验证分析链路，并非真实玩家记录。项目尚未上线，不存在线上效果数据，亦无可引用的业务提升比例。跨项目基准线部分目前不具备真实数据支撑，相关结果不作为行业基准使用。<br><br>
+  报告中的具体数值、检出结论与关卡结构均随每次上传的数据而变化，本页不列举任何一次样例结果作为固定标准；示例报告仅用于展示输出形态与版式。
 </div>
 
-<h2><span class="no">六、</span>本地运行</h2>
+<h2><span class="no">五、</span>本地运行</h2>
 <pre><code>pip install -r requirements.txt
-python -m playpulse check data/raw/试玩数据-合成-100份.csv
+python -m playpulse check &lt;你的试玩数据.csv&gt;
 streamlit run app.py</code></pre>
-<p class="muted">依赖清单见 requirements.txt。首条命令在 out/ 目录下生成 Markdown、HTML 与 Excel 三份报告；第二条命令启动多页 Web 界面。</p>
+<p class="muted">依赖清单见 requirements.txt。首条命令在 out/ 目录下生成 Markdown、HTML 与 Excel 三份报告；第二条命令启动多页 Web 界面。仓库内附有一份合成样例数据（见 data/raw/），可直接用于试跑。</p>
 
 <a class="btn" href="示例报告.html">查看示例报告</a>
-<p class="muted">代码仓库地址将在上传完成后补充。完整设计说明与指标字典见项目 README 与 docs/ 目录。</p>
+<p class="muted">示例报告仅展示输出形态，其中数值来自一份合成样例，随数据变化，不作为标准。代码仓库地址将在上传完成后补充；完整设计说明与指标字典见项目 README 与 docs/ 目录。</p>
 
 <footer>
   PlayPulse · 把脉 ｜ 游戏试玩数据难度诊断工具<br>

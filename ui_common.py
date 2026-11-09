@@ -55,10 +55,11 @@ def sidebar_data_source() -> Optional[str]:
         files = st.file_uploader("CSV / Excel，可多选（多份填写表会自动合并）",
                                  type=["csv", "xlsx", "xls"],
                                  accept_multiple_files=True, key="pp_uploader")
-        if st.button("用内置合成样例（100 人 × 3 关）", key="pp_demo"):
+        if st.button("用内置合成样例试跑", key="pp_demo"):
             st.session_state["pp_path"] = DEMO_CSV
             st.session_state.pop("report_html", None)
             st.session_state.pop("report_xlsx", None)
+        st.caption("内置样例仅用于试跑；换成自己的数据后，报告数值与结论都会变化。")
 
         if files:
             st.session_state["pp_path"] = save_uploads(files)
