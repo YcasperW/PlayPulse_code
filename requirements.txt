@@ -1,0 +1,20 @@
+# PlayPulse · 把脉 —— 运行依赖
+#
+# 安装： pip install -r requirements.txt
+#
+# 说明：本项目刻意不依赖任何 LLM SDK。
+#   指标口径写在 metrics.yaml 里，问答走「意图路由」而不是「生成 SQL」，
+#   所以整条链路离线可跑、结果可复现。这是决策 D1 的副作用，也是它的优点：
+#   口径不会因为模型版本升级或 temperature 抖动而变。
+
+pandas>=2.0
+numpy>=1.24
+PyYAML>=6.0
+matplotlib>=3.7
+scipy>=1.10
+openpyxl>=3.1        # 读 Excel 现场填写表 + 导出 xlsx 报告
+
+# Web UI（可选，不装也能用 CLI）
+# 下限提到 1.50：UI 用的是 width="stretch"/"content"，1.50 之前只认
+# use_container_width，装太老会直接报错。上限锁在 2.0 以下，大版本再议。
+streamlit>=1.50,<2.0

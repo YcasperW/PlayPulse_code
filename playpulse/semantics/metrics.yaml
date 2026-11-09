@@ -1,0 +1,347 @@
+# =============================================================================
+# PlayPulse · 指标本体（Metrics Ontology）
+# =============================================================================
+# 这是整个项目的核心资产，也是痛点①「业务方和数据方口径对不上」的正面解法：
+#
+#   口径不再活在某个人脑子里、也不再散落在 SQL 里，而是写在这份文件里——
+#   可版本化、可导出给双方看、可跨项目复用。改口径 = 改这个文件 + 走 review。
+#
+# 对应 docs/03「三层指标本体」：
+#   layer: universal  → 通用层，强制统一口径（改了会影响跨项目基准线）
+#   layer: category   → 品类层，可插拔（开箱 / 卡牌 / 放置 …）
+#   layer: project    → 项目层，项目组自定义，不污染上层
+#
+# 公式语法（安全求值，见 expr.py）：
+#   只允许 加减乘除取模、括号、数字、字段引用、以及白名单函数。
+#   白名单：abs sqrt log log1p exp round min max clip safe_div zscore mean median max_ratio
+#   除法请优先用 safe_div(a, b) —— 分母为 0 时返回 NaN，不会炸。
+# =============================================================================
+
+version: 0.2
+updated: "2026-09-22"
+domain: 休闲游戏·内部试玩
+note: >
+  V0.2：按 docs/03 三层结构重写。通用层指标口径锁定，不可随意改动；
+  改动 universal 层需同步评估对跨项目基准线（PlayBench）的影响。
+
+# -----------------------------------------------------------------------------
+# 字段级口径说明：报告里「口径说明」章节直接读这里，保证策划和数据分析看到同一份定义
+# -----------------------------------------------------------------------------
+thresholds:
+  stuck_ratio_warn: 0.40        # 卡关占比 > 0.4 = 这关大部分时间在干等
+  time_dilation_warn: 1.30      # 膨胀 > 1.3 = 体感比实际漫长（枯燥）
+  time_dilation_flow: 0.80      # 膨胀 < 0.8 = 心流
+  jump_ratio_cliff: 1.50        # 相邻关卡耗时跳变 > 1.5 倍 = 断崖
+  attempt_jump_cliff: 1.80      # 尝试次数跳变 > 1.8 倍 = 硬卡点
+  quit_share_warn: 0.20         # 「想退出」占比 > 20% = 准流失集中
+  min_players_for_conclusion: 8 # 样本量门槛：低于这个人数只给区间，不给结论
+
+# -----------------------------------------------------------------------------
+# 指标定义
+# -----------------------------------------------------------------------------
+metrics:
+
+  # ================= 通用层：客观难度 =================
+  - id: duration_sec
+    name: 关卡耗时
+    layer: universal
+    unit: 秒
+    formula: duration_sec
+    agg: median
+    min_n: 5
+    direction: higher_is_worse
+    why: 最基础的客观难度度量
+    caveat: >
+      docs/03 明确指出：在开箱类品类里，时长基本是「数值/产出速率」的函数，
+      把产出调高 10% 时长就掉一截，跟体验好坏关系不大。
+      所以它只能当**校验指标**（实际 vs 设计），不能当优化目标。
+
+  - id: stuck_ratio
+    name: 卡关占比
+    layer: universal
+    unit: ""
+    formula: safe_div(stuck_sec, duration_sec)
+    agg: median
+    min_n: 5
+    direction: higher_is_worse
+    warn_above: 0.40
+    why: 卡关时长占整关的比例。折磨感的主要来源，比单纯看耗时更能反映体验
+    fix: 区分「自然攒资源」和「干等」。干等要给出路（加速/广告/提示），不是降数值
+
+  - id: attempts
+    name: 尝试次数
+    layer: universal
+    unit: 次
+    formula: attempts
+    agg: median
+    min_n: 5
+    direction: higher_is_worse
+    why: 失败重开次数，硬卡点的直接判定依据
+
+  - id: active_sec
+    name: 主动推进时长
+    layer: universal
+    unit: 秒
+    formula: active_sec
+    agg: median
+    min_n: 5
+    direction: neutral
+    why: 有操作、有反馈的时间。与卡关时长分开看才有意义
+
+  # ================= 通用层：主观感知 =================
+  - id: frustration
+    name: 挫败感
+    layer: universal
+    unit: "1-5"
+    formula: frustration_score
+    agg: mean
+    min_n: 5
+    direction: higher_is_worse
+    why: 与「挑战感」是两个独立的分，不要合并——高挫败+低挑战=纯折磨，高挫败+高挑战=硬核爽点
+
+  - id: challenge
+    name: 挑战感
+    layer: universal
+    unit: "1-5"
+    formula: challenge_score
+    agg: mean
+    min_n: 5
+    direction: neutral
+    why: 理想状态是挑战感高、挫败感低（心流）
+
+  - id: difficulty_delta
+    name: 难度增量
+    layer: universal
+    unit: "-2~+2"
+    formula: difficulty_delta
+    agg: mean
+    min_n: 5
+    direction: higher_is_worse
+    why: >
+      相对上一关的难度变化，而不是绝对 1-7 分。
+      绝对分每个人锚点不同，10 个人 10 套标准，均值没有意义（docs/02 关键改造一）
+
+  - id: time_dilation
+    name: 时间膨胀系数
+    layer: universal
+    unit: ""
+    formula: safe_div(estimated_duration_sec, duration_sec)
+    agg: median
+    min_n: 5
+    direction: higher_is_worse
+    warn_above: 1.30
+    warn_below: 0.80
+    why: >
+      预估 / 实际。> 1.3 说明体感比实际漫长（枯燥、干等）；
+      < 0.8 说明进入心流。这个指标能抓到「数据上不难、玩起来很煎熬」的关卡——
+      纯看耗时永远发现不了（docs/02 2.3）
+    caveat: 若全关卡都 < 0.8，需检查是否只是无决策的挂机消耗，而非真好
+
+  # ================= 通用层：卡关归因 =================
+  - id: quit_share
+    name: 想退出占比
+    layer: universal
+    unit: ""
+    formula: "stuck_choice_code == 4"
+    agg: mean
+    min_n: 8
+    direction: higher_is_worse
+    warn_above: 0.20
+    why: >
+      卡住时选「直接退出」的人占比。这是**最强流失信号**，等同准流失点。
+      注意它来自强制选择题（继续等/看广告/付费/退出），不是「你愿意付费吗」这类无效意愿提问
+
+  - id: ad_choice_share
+    name: 看广告选择占比
+    layer: universal
+    unit: ""
+    formula: "stuck_choice_code == 2"
+    agg: mean
+    min_n: 8
+    direction: neutral
+    why: 广告位的自然触发率——玩家真的卡住了才会看，说明这个点位放对了地方
+
+  - id: pay_choice_share
+    name: 付费选择占比
+    layer: universal
+    unit: ""
+    formula: "stuck_choice_code == 3"
+    agg: mean
+    min_n: 8
+    direction: neutral
+    why: 付费意愿信号。内部测试只能问意愿，不能真付费，只能做版本间相对比较
+    caveat: 内部测试环境下这列的绝对数值不可信，只能比大小
+
+  # ================= 品类层：开箱玩法 =================
+  - id: chest_open_count
+    name: 开箱次数
+    layer: category
+    unit: 次
+    formula: chest_open_count
+    agg: median
+    min_n: 5
+    direction: neutral
+    applies_to: [开箱类]
+    why: 开箱品类的核心消耗度量。与耗时一起看能区分「磨时间」和「等资源」
+
+  - id: perceived_drop_rate
+    name: 感知掉率
+    layer: category
+    unit: "%"
+    formula: perceived_drop_rate
+    agg: median
+    min_n: 8
+    direction: neutral
+    applies_to: [开箱类]
+    why: >
+      玩家估计的稀有物概率。与配置概率对比得感知偏差：
+      偏差 < -15pt = 保底没被感知到；> +15pt = 预期被吊高，后面必然失望
+
+  # ================= 项目层：结果代理指标 =================
+  - id: next_day_return
+    name: 次日自发回归率
+    layer: project
+    unit: ""
+    formula: next_day_return
+    agg: mean
+    min_n: 8
+    direction: higher_is_better
+    why: >
+      未上线阶段最接近 D1 留存的代理指标。第一天明确说「测试结束了」，
+      第二天不提醒、不发消息，看他会不会自己打开（docs/02 1.2）
+    caveat: 10 人里 2 人自发回来，比 10 人全说「好玩」更有说服力
+
+# -----------------------------------------------------------------------------
+# 复合指标：由多个基础指标加权合成
+# 这是「策划说人话 → 系统翻译成什么」的核心映射（docs/01 特色二）
+#   "哪关最难"  ≠  ORDER BY 耗时 DESC
+#   "哪关最难"  =  难度指数 = f(耗时, 卡关占比, 尝试次数, 挫败感) 加权
+# -----------------------------------------------------------------------------
+composites:
+  - id: difficulty_index
+    name: 难度指数
+    layer: universal
+    unit: "0-100"
+    norm: max_ratio          # 归一化方式：占最高关卡的百分比（见 expr.max_ratio 的说明）
+    min_n: 5
+    direction: higher_is_worse
+    why: >
+      把「哪关最难」这个问题翻译成一个可复现的加权合成值，而不是简单按耗时排序。
+      权重可按品类调整，但一旦用于跨项目基准线就必须锁定
+    components:
+      - metric: duration_sec
+        weight: 0.35
+        reason: 客观耗时的相对位置，权重最高但不过半（避免「产出调高就变简单」的误判）
+      - metric: stuck_ratio
+        weight: 0.30
+        reason: 干等比例，折磨感主来源
+      - metric: attempts
+        weight: 0.20
+        reason: 硬卡点判定
+      - metric: frustration
+        weight: 0.15
+        reason: 主观挫败，权重最低（主观分噪声大，且样本小时不稳定）
+
+  - id: perceived_difficulty
+    name: 感知难度曲线
+    layer: universal
+    unit: "相对值"
+    norm: cumulative
+    min_n: 5
+    direction: higher_is_worse
+    why: >
+      由「难度增量」逐关累加得到。因为增量是相对上一关的，跨人可比（自带基线校准），
+      累加后能与客观难度曲线叠图，找两者背离的关卡（docs/02 关键改造一）
+    components:
+      - metric: difficulty_delta
+        weight: 1.0
+        reason: 逐关累加，首关以 0 为起点
+
+# -----------------------------------------------------------------------------
+# 洞察规则：什么算异常。这是领域知识壁垒，不是算法壁垒
+#   Quick BI 也做异常检测，但它检测的是「通用统计离群点」；
+#   PlayPulse 知道「在游戏测试语境下什么算异常」
+# -----------------------------------------------------------------------------
+rules:
+  - id: cliff
+    name: 断崖检测
+    layer: universal
+    target: duration_sec
+    kind: jump
+    threshold: 1.50
+    min_n: 5
+    severity: high
+    why: 相邻关卡耗时跳变 > 1.5 倍。断崖是流失高发点（docs/02 2.4）
+    fix: >
+      优先在这一关之前补一个缓冲（给资源/给提示/拆成两关），
+      而不是直接砍这一关的数值——砍数值会让后面的曲线整体失衡
+    target_shape: 锯齿上升（有起伏有喘息），不是直线上升，也不是长期平台
+
+  - id: hard_block
+    name: 硬卡点检测
+    layer: universal
+    target: attempts
+    kind: jump
+    threshold: 1.80
+    min_n: 5
+    severity: high
+    why: 尝试次数跳变 > 1.8 倍，说明玩家在这里反复失败
+    fix: >
+      先回看录屏分清是「不会玩」还是「打不过」：前者改引导（信息问题），
+      后者降数值或给救济出口（数值问题）。两者的改法完全不同，归因错了就会乱调数值
+
+  - id: dilation_alert
+    name: 时间膨胀异常
+    layer: universal
+    target: time_dilation
+    kind: threshold
+    threshold: 1.30
+    min_n: 5
+    severity: high
+    why: 体感比实际漫长 → 枯燥/重复/干等。纯看耗时发现不了的问题
+    fix: 加反馈节奏（进度条、阶段奖励、可操作内容），不是简单缩短时长
+
+  - id: stuck_alert
+    name: 卡关占比异常
+    layer: universal
+    target: stuck_ratio
+    kind: threshold
+    threshold: 0.40
+    min_n: 5
+    severity: medium
+    why: 这关大部分时间在干等
+    fix: 给出口（加速/广告/提示）；若资源缺口大则是数值墙，调产出或调消耗
+
+  - id: quit_alert
+    name: 准流失集中
+    layer: universal
+    target: quit_share
+    kind: threshold
+    threshold: 0.20
+    min_n: 8
+    severity: high
+    why: 卡住时选「直接退出」的人超过 20%，等同准流失点
+    fix: >
+      在这一关给出口而不是全局降难度：先给提示/跳过券/存档点，让玩家有「再试一次」的理由。
+      退出率高通常不是因为太难，而是因为看不到「快通关了」
+
+  - id: perception_gap
+    name: 客观/感知背离
+    layer: universal
+    target: difficulty_index
+    against: perceived_difficulty
+    kind: rank_gap
+    threshold: 1            # 排名差 ≥ 1 位即视为背离（关卡少时用排名差比用绝对差稳健）
+    min_n: 5
+    severity: medium
+    why: >
+      客观不难但玩家觉得难 = 假性难度（进度反馈没做好）；
+      客观难但玩家觉得不难 = 心流，或在无感消耗。两者背离的位置就是设计问题所在
+    fix: >
+      背离本身就是结论：先看四象限定位落在哪一格，再按该格的建议改。
+      不要用一个「综合难度分」去抹平背离——被抹掉的那部分正是设计问题所在
+    quadrants:
+      high_obj_high_per: 真实卡点：数值墙 → 降数值，或给广告/提示做救济
+      low_obj_high_per: 假性难度：玩家不知道自己在推进 → 强化进度反馈与预期管理
+      low_obj_low_per: 顺滑但可能无聊：缺节奏起伏 → 插入小高潮
+      high_obj_low_per: 心流，或无感消耗 → 追问是否享受，再加回访钩子

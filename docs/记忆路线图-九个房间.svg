@@ -1,0 +1,71 @@
+<svg viewBox="0 0 680 728" width="100%" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>PlayPulse 九个房间的记忆路线图</title>
+<desc>一张乱表从大门进入，依次走过挂号、分诊、医典、化验、质控、诊室、病历、答疑、档案九个房间，最后变成报告交回。</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<rect width="680" height="728" fill="#111820"/>
+<path d="M48 83 L48 660" fill="none" stroke="#378ADD" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<circle cx="48" cy="68" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="68" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">0</text>
+<rect x="76" y="40" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="59" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">0. 大门 —— cli.py / app.py / ui_common.py</text>
+<text x="96" y="79" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">人从这进，报告从这出</text>
+
+<circle cx="48" cy="136" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="136" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">1</text>
+<rect x="76" y="108" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="127" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">1. 挂号处 —— schema.py</text>
+<text x="96" y="147" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">采集什么，只有这一份清单</text>
+
+<circle cx="48" cy="204" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="204" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">2</text>
+<rect x="76" y="176" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="195" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">2. 分诊台 —— io_load.py</text>
+<text x="96" y="215" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">表头随便写，我翻成同一张表</text>
+
+<circle cx="48" cy="272" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="272" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">3</text>
+<rect x="76" y="244" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="263" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">3. 医典室 —— metrics.yaml + registry.py + expr.py</text>
+<text x="96" y="283" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">口径只有一个来源，改 YAML 不改代码</text>
+
+<circle cx="48" cy="340" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="340" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">4</text>
+<rect x="76" y="312" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="331" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">4. 化验科 —— semantics/compute.py</text>
+<text x="96" y="351" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">先聚合成一人一值，再算区间</text>
+
+<circle cx="48" cy="408" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="408" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">5</text>
+<rect x="76" y="380" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="399" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">5. 质控科 —— statsx.py</text>
+<text x="96" y="419" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">够不够格，我先说清楚</text>
+
+<circle cx="48" cy="476" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="476" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">6</text>
+<rect x="76" y="448" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="467" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">6. 诊室 —— insights.py + diff.py</text>
+<text x="96" y="487" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">不只说哪有问题，还说怎么改</text>
+
+<circle cx="48" cy="544" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="544" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">7</text>
+<rect x="76" y="516" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="535" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">7. 病历室 —— report.py + charts.py</text>
+<text x="96" y="555" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">一堆中间块，两个渲染器</text>
+
+<circle cx="48" cy="612" r="15" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="48" y="612" text-anchor="middle" dominant-baseline="central" fill="#B5D4F4" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">8</text>
+<rect x="76" y="584" width="564" height="56" rx="10" fill="#0C447C" stroke="#85B7EB" stroke-width="0.5"/>
+<text x="96" y="603" dominant-baseline="central" fill="#B5D4F4" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">8. 答疑台 —— cards.py</text>
+<text x="96" y="623" dominant-baseline="central" fill="#85B7EB" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">答不了就说答不了</text>
+
+<circle cx="48" cy="680" r="15" fill="#085041" stroke="#5DCAA5" stroke-width="0.5"/>
+<text x="48" y="680" text-anchor="middle" dominant-baseline="central" fill="#9FE1CB" font-size="13" font-family="Microsoft YaHei, PingFang SC, sans-serif">9</text>
+<rect x="76" y="652" width="564" height="56" rx="10" fill="#085041" stroke="#5DCAA5" stroke-width="0.5"/>
+<text x="96" y="671" dominant-baseline="central" fill="#9FE1CB" font-size="14" font-weight="500" font-family="Microsoft YaHei, PingFang SC, sans-serif">9. 档案库 —— bench.py（PlayBench）</text>
+<text x="96" y="691" dominant-baseline="central" fill="#5DCAA5" font-size="12" font-family="Microsoft YaHei, PingFang SC, sans-serif">一个项目一票，不到 3 个不给基准线</text>
+</svg>

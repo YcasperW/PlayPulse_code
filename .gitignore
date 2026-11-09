@@ -1,0 +1,24 @@
+# 2026-11-06 整理：历史样本表和代码备份已归档到 _archive/
+# 这里只忽略可再生的东西，让 PyCharm 文件树别被缓存和产物淹没
+
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# 运行产物，随时能重新生成
+out/
+
+# 编辑器本地状态
+**/.idea/
+.streamlit/
+
+# 归档噪音：102 份样本表 + 两份历史代码备份，只留本地，不进公开仓库
+_archive/
+
+# 本地临时备份
+*.bak
+
+# 本机一键上传工具（含本机路径，不进公开仓库）
+上传GitHub.bat
+upload_to_github.py

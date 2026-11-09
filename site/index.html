@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayPulse · 把脉 | 游戏试玩数据难度诊断工具</title>
+<style>
+  :root{
+    --bg:#ffffff; --ink:#1b2733; --sub:#4e5b68;
+    --line:#dde3e9; --accent:#27435e; --soft:#f5f7f9;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+       line-height:1.85;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:64px 32px 88px}
+  header{margin-bottom:44px}
+  .eyebrow{font-size:12.5px;letter-spacing:.12em;color:var(--accent);margin:0 0 14px}
+  h1{font-size:31px;line-height:1.35;margin:0 0 10px;font-weight:700}
+  .subtitle{font-size:16px;color:var(--sub);margin:0 0 22px}
+  .rule{height:1px;background:var(--line);margin:0 0 24px}
+  .lead{font-size:15.5px;margin:0}
+  h2{font-size:18.5px;margin:44px 0 18px;font-weight:650;
+     padding-bottom:10px;border-bottom:1px solid var(--line)}
+  h2 .no{color:var(--accent);margin-right:10px}
+  p{margin:0 0 14px}
+  .item{border-left:2px solid var(--accent);padding:2px 0 2px 18px;margin:0 0 18px}
+  .item h3{font-size:15px;margin:0 0 6px;font-weight:650}
+  .item p{margin:0;color:var(--sub);font-size:14.5px}
+  ul{margin:0;padding-left:20px}
+  li{margin:0 0 10px;color:var(--sub);font-size:14.5px}
+  li b{color:var(--ink);font-weight:600}
+  .tbl-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:10px 14px;text-align:left;vertical-align:top}
+  th{background:var(--soft);font-weight:650;white-space:nowrap}
+  td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  .note{background:var(--soft);border-left:3px solid var(--accent);
+        padding:16px 20px;font-size:14px;margin:0}
+  pre{background:#1a2633;color:#e8edf2;border-radius:3px;padding:16px 20px;
+      overflow-x:auto;font-size:13px;line-height:1.8;margin:0 0 12px}
+  code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+  .muted{color:var(--sub);font-size:14px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;
+       padding:10px 22px;border-radius:3px;font-size:14px;font-weight:600;margin:24px 0 12px}
+  footer{margin-top:60px;padding-top:20px;border-top:1px solid var(--line);
+         color:var(--sub);font-size:12.5px;line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">PlayPulse · 把脉</p>
+  <h1>游戏试玩数据难度诊断工具</h1>
+  <p class="subtitle">面向未上线游戏的自动化难度评估与卡关归因</p>
+  <div class="rule"></div>
+  <p class="lead">本项目面向游戏试玩阶段的难度评估需求，提供一套可复现的自动化分析流程。使用者上传试玩数据后，系统无需交互提问即可生成诊断报告，定位难度陡增的关卡、分析卡关原因并给出调整建议；当样本量不足以支撑统计推断时，系统不给出确定性结论，而是标注该结论的可信边界。</p>
+</header>
+
+<h2><span class="no">一、</span>设计要点</h2>
+<div class="item">
+  <h3>指标口径统一定义</h3>
+  <p>全部指标集中定义于一份 YAML 语义层，包含 14 项基础指标、6 条判定规则与 2 个复合指标；「关卡难度」等概念均有固定算法。由于指标本体预定义，系统不需要通用 Text-to-SQL，可避免自然语言转 SQL 带来的口径偏差。</p>
+</div>
+<div class="item">
+  <h3>报告优先的交互方式</h3>
+  <p>通用 BI 通常假设使用者已明确分析目标，而试玩阶段的策划难以预先提出具体问题。本项目将「上传即出报告」设为默认动作，问答仅用于选取预定义分析卡片与解读结论。</p>
+</div>
+<div class="item">
+  <h3>多格式同源输出</h3>
+  <p>Markdown、HTML 与 Excel 三种格式由同一份内容结构渲染，确保各版本的指标口径与结论一致。</p>
+</div>
+
+<h2><span class="no">二、</span>报告输出内容</h2>
+<ul>
+  <li><b>难度断崖</b>：以相邻关卡耗时倍数识别难度陡增，判定阈值 1.5；样例数据检出第 2 关为第 1 关的 1.62 倍。</li>
+  <li><b>硬卡点与准流失</b>：依据卡住时长与退出占比标记风险关卡。</li>
+  <li><b>卡关归因</b>：区分信息问题（引导说明不清）与数值问题（难度设定过高），避免归因偏差导致错误调参。</li>
+  <li><b>可信边界</b>：每个估计值附置信区间与样本量；样本不足时，结论标注为方向性参考。</li>
+</ul>
+
+<h2><span class="no">三、</span>关键指标与验证结果</h2>
+<div class="tbl-wrap">
+<table>
+  <thead><tr><th>项目</th><th>数值</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>关卡数</td><td>3 关</td><td>样例数据的关卡结构</td></tr>
+    <tr><td>样本规模</td><td>100 名玩家 / 300 行</td><td>合成数据，每名玩家 3 关</td></tr>
+    <tr><td>语义层规模</td><td>14 项指标 / 6 条规则 / 2 个复合指标</td><td>口径的唯一事实来源</td></tr>
+    <tr><td>难度断崖检出</td><td>1.62 倍</td><td>第 2 关相对第 1 关，阈值 1.5</td></tr>
+    <tr><td>自动发现</td><td>4 条</td><td>样例报告输出的诊断结论</td></tr>
+    <tr><td>输出格式</td><td>3 种</td><td>Markdown / HTML / Excel，同源渲染</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2><span class="no">四、</span>功能模块</h2>
+<ul>
+  <li><b>Pulse Check（难度体检）</b>：上传 CSV 后自动生成诊断报告，主流程已完成完整流程验证。</li>
+  <li><b>PlayBench（跨项目基准线）</b>：架构已就位。目前仅 1 个项目具备游戏数据，基准库内项目均为合成派生数据，仅用于验证链路，不构成行业基准。</li>
+  <li><b>Signal / Noise（小样本诚实性）</b>：实现 Bootstrap 置信区间、效应量与样本量门槛。</li>
+</ul>
+
+<h2><span class="no">五、</span>数据说明与使用边界</h2>
+<div class="note">
+  本项目所用试玩数据，以及页面展示的示例报告，均为合成 / 仿真数据，用于验证分析链路，并非真实玩家记录。项目尚未上线，不存在线上效果数据，亦无可引用的业务提升比例。跨项目基准线部分目前不具备真实数据支撑，相关结果不作为行业基准使用。
+</div>
+
+<h2><span class="no">六、</span>本地运行</h2>
+<pre><code>pip install -r requirements.txt
+python -m playpulse check data/raw/试玩数据-合成-100份.csv
+streamlit run app.py</code></pre>
+<p class="muted">依赖清单见 requirements.txt。首条命令在 out/ 目录下生成 Markdown、HTML 与 Excel 三份报告；第二条命令启动多页 Web 界面。</p>
+
+<a class="btn" href="示例报告.html">查看示例报告</a>
+<p class="muted">代码仓库地址将在上传完成后补充。完整设计说明与指标字典见项目 README 与 docs/ 目录。</p>
+
+<footer>
+  PlayPulse · 把脉 ｜ 游戏试玩数据难度诊断工具<br>
+  示例数据与示例报告均为合成 / 仿真数据；项目未上线。源码与完整文档托管于 GitHub。
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<svg viewBox="0 0 680 626" width="680" height="626" xmlns="http://www.w3.org/2000/svg" role="img">
+<title>PlayPulse 从 MVP 到完整版的技术路径</title>
+<desc>四个阶段纵向排列：MVP 已跑通、V1 已跑通、V1.5 待做、V2 规划中，每阶段列出技术要点与关键判断，底部列出始终不做的事项。</desc>
+
+<rect x="0" y="0" width="680" height="626" fill="#FFFFFF"/>
+<text x="40" y="38" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="15" font-weight="500" fill="#2C2C2A">从 MVP 到完整版 · 技术路径</text>
+<text x="40" y="58" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">PlayPulse · 把脉 ｜ 2026-09-24</text>
+
+<rect x="40" y="84" width="600" height="100" rx="10" fill="#F5F4F1" stroke="#E3E1DA" stroke-width="0.5"/>
+<rect x="44" y="92" width="3" height="84" rx="1.5" fill="#0F6E56"/>
+<circle cx="68" cy="112" r="13" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text x="68" y="112" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="13" fill="#085041">①</text>
+<text x="94" y="112" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="14" font-weight="500" fill="#2C2C2A">MVP · 一份 CSV 进，一份诊断报告出</text>
+<text x="622" y="112" text-anchor="end" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#0F6E56">已跑通</text>
+<rect x="94" y="132" width="136" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="162" y="144" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">采集表 → 规范化入库</text>
+<rect x="238" y="132" width="138" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="307" y="144" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">语义层 metrics.yaml</text>
+<rect x="384" y="132" width="92" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="430" y="144" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">难度体检报告</text>
+<rect x="484" y="132" width="98" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="533" y="144" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">版本对比 Diff</text>
+<text x="94" y="162" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">地基一次性打完：语义层 + 统计层在这里定死，后面所有能力都长在它上面</text>
+
+<rect x="40" y="200" width="600" height="100" rx="10" fill="#F5F4F1" stroke="#E3E1DA" stroke-width="0.5"/>
+<rect x="44" y="208" width="3" height="84" rx="1.5" fill="#0F6E56"/>
+<circle cx="68" cy="228" r="13" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text x="68" y="228" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="13" fill="#085041">②</text>
+<text x="94" y="228" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="14" font-weight="500" fill="#2C2C2A">V1 · 从「看自己」到「看同类」</text>
+<text x="622" y="228" text-anchor="end" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#0F6E56">已跑通</text>
+<rect x="94" y="248" width="154" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="171" y="260" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">PlayBench 跨项目基准线</text>
+<rect x="256" y="248" width="122" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="317" y="260" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">Streamlit 多页 UI</text>
+<rect x="386" y="248" width="88" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="430" y="260" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">自检脚本 ×2</text>
+<text x="94" y="278" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">基准线是飞轮：接入越多 → 基准越准 → 对每个项目越有价值 → 越容易推下一个接入</text>
+
+<rect x="40" y="316" width="600" height="100" rx="10" fill="none" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="5 4"/>
+<rect x="44" y="324" width="3" height="84" rx="1.5" fill="#888780"/>
+<circle cx="68" cy="344" r="13" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+<text x="68" y="344" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="13" fill="#444441">③</text>
+<text x="94" y="344" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="14" font-weight="500" fill="#2C2C2A">V1.5 · 交付与稳定性</text>
+<text x="622" y="344" text-anchor="end" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">待做</text>
+<rect x="94" y="364" width="119" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="153" y="376" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">导出 Word / Excel</text>
+<rect x="221" y="364" width="111" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="276" y="376" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">pytest 回归测试</text>
+<rect x="340" y="364" width="80" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="380" y="376" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">品类包插拔</text>
+<text x="94" y="394" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">只动交付与稳定性，不动核心口径 —— 口径一改，历史基准线全部作废</text>
+
+<rect x="40" y="432" width="600" height="100" rx="10" fill="none" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="5 4"/>
+<rect x="44" y="440" width="3" height="84" rx="1.5" fill="#888780"/>
+<circle cx="68" cy="460" r="13" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+<text x="68" y="460" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="13" fill="#444441">④</text>
+<text x="94" y="460" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="14" font-weight="500" fill="#2C2C2A">V2 · 换数据源，不换口径</text>
+<text x="622" y="460" text-anchor="end" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">规划</text>
+<rect x="94" y="480" width="80" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="134" y="492" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">多品类验证</text>
+<rect x="182" y="480" width="129" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="246" y="492" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">线上留存 / 付费接入</text>
+<rect x="319" y="480" width="104" height="24" rx="6" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="0.5"/>
+<text x="371" y="492" text-anchor="middle" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#2C2C2A">团队级基准看板</text>
+<text x="94" y="510" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">通用层口径强制统一是前提 —— 否则扩再多品类，也拼不出一条跨项目基准线</text>
+
+<rect x="40" y="548" width="600" height="58" rx="10" fill="none" stroke="#B4B2A9" stroke-width="0.5" stroke-dasharray="5 4"/>
+<text x="94" y="568" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="13" font-weight="500" fill="#2C2C2A">始终不做：通用问数 / 图表美化 / 仪表板 / 预测功能</text>
+<text x="94" y="590" dominant-baseline="central" font-family="'PingFang SC','Microsoft YaHei',system-ui,sans-serif" font-size="12" fill="#5F5E5A">在小样本上做预测，与「样本不够就明确拒绝下结论」这个卖点自相矛盾</text>
+</svg>
